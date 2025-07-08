@@ -4,3 +4,4 @@ export class MailService {
     console.log(`Book sent!🥳`);
   }
 }
+export const mailService = new MailService();

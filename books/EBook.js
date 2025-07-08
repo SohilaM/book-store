@@ -1,4 +1,4 @@
-import { Book } from "./book";
+import { Book } from "./book.js";
 
 export class EBook extends Book {
   constructor(ISBN, title, publishYear, price, fileType) {

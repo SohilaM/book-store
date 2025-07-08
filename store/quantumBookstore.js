@@ -1,24 +1,27 @@
-import { DemoBook } from "../books/demoBook";
-import { EBook } from "../books/EBook";
-import { PaperBook } from "../books/paperBook";
+import { DemoBook } from "../books/demoBook.js";
+import { EBook } from "../books/EBook.js";
+import { PaperBook } from "../books/paperBook.js";
 
-import { MailService } from "../services/mailService";
-import { ShippingService } from "../services/shippingService";
+import { mailService } from "../services/mailService.js";
+import { shippingService } from "../services/shippingService.js";
 
-class QuantumBookstore {
+export class QuantumBookstore {
   inventory = [];
 
   addDemoBook(ISBN, title, publishYear) {
     const book = new DemoBook(ISBN, title, publishYear);
     this.inventory.push(book);
+    console.log("Added a new Demo Book");
   }
   addEBook(ISBN, title, publishYear, price, fileType) {
     const book = new EBook(ISBN, title, publishYear, price, fileType);
     this.inventory.push(book);
+    console.log("Added a new E Book");
   }
   addPaperBook(ISBN, title, publishYear, price, stock) {
     const book = new PaperBook(ISBN, title, publishYear, price, stock);
     this.inventory.push(book);
+    console.log("Added a new Paper Book");
   }
 
   removeOutdated(year) {
@@ -29,17 +32,24 @@ class QuantumBookstore {
     this.inventory = this.inventory.filter((book) => {
       return thisYear - book.publishYear < year;
     });
-    return outdated;
+    console.log(`${outdated.length} Books removed`);
+    return outdated.map((book) => book.title);
   }
 
   buyEBook(ISBN, emailAddress) {
     const idx = this.inventory.findIndex((book) => book.ISBN === ISBN);
     const book = this.inventory[idx];
+
+    if (idx === -1) {
+      console.log(`Error! Book not Found`);
+      return;
+    }
+
     if (book instanceof DemoBook) {
       console.log("Quantum book store: Error! Demo books are not for sale");
       return;
     }
-    MailService.sendBook(book, emailAddress);
+    mailService.sendBook(book, emailAddress);
     return book.price;
   }
 
@@ -47,8 +57,13 @@ class QuantumBookstore {
     const idx = this.inventory.findIndex((book) => book.ISBN === ISBN);
     const book = this.inventory[idx];
 
+    if (idx === -1) {
+      console.log(`Error! Book not Found`);
+      return;
+    }
+
     if (book instanceof DemoBook) {
-      console.log("Quantum book store: Error! Demo books are not for sale");
+      console.log("Error! Demo books are not for sale");
       return;
     }
 
@@ -57,7 +72,7 @@ class QuantumBookstore {
       return;
     }
     book.stock -= quantity;
-    ShippingService.shipBook(book, quantity, address);
+    shippingService.shipBook(book, quantity, address);
     return book.price * quantity;
   }
 }

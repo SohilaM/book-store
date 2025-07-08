@@ -4,3 +4,5 @@ export class ShippingService {
     console.log(`Book shipped!🥳`);
   }
 }
+
+export const shippingService = new ShippingService();
