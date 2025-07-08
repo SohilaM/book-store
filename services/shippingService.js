@@ -1,6 +1,6 @@
 export class ShippingService {
-  shipBook(book, address) {
-    console.log(`Shipping ${book.title} to ${address} ...`);
+  shipBook(book, quantity, address) {
+    console.log(`Shipping ${quantity} ${book.title} to ${address} ...`);
     console.log(`Book shipped!🥳`);
   }
 }
